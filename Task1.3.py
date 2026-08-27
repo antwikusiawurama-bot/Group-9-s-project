@@ -1,9 +1,9 @@
-import pandas as pd
+import pandas as pd  # type: ignore
 
 
-utilities = pd.read_csv('utilities.csv')
-substations = pd.read_csv('substations.csv')
-lines = pd.read_csv('lines.csv')
+utilities = pd.read_csv('utilities_cleaned.csv')
+substations = pd.read_csv('substations_cleaned.csv')
+lines = pd.read_csv('lines_cleaned.csv')
 
 # Join Substations with Utilities on 'utility_id'
 substations_util = pd.merge(
