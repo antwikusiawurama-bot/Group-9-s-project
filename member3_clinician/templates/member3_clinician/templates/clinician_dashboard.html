@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinician Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ clinician.name }}</h1>
+    <p>Clinic ID: {{ clinician.clinic_id }}</p>
+    <a href="/clinician/messages">Go to Messages</a>
+    <hr>
+
+    <h2>Create Health Task</h2>
+    <form method="POST" action="/clinician/create-task">
+        <input type="text" name="title" placeholder="Task Title" required><br><br>
+        <textarea name="description" placeholder="Task Instructions" required></textarea><br><br>
+        <input type="date" name="due_date" required><br><br>
+
+        <h3>Assign to Patients</h3>
+        {% for patient_id, patient in patients.items() %}
+            <label>
+                <input type="checkbox" name="patient_ids" value="{{ patient_id }}">
+                {{ patient.name }}
+            </label><br>
+        {% endfor %}
+        <br>
+        <button type="submit">Create Health Task</button>
+    </form>
+    <hr>
+
+    <h2>Patient Submissions</h2>
+    {% for sub_id, submission in submissions.items() %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <p><strong>Submission ID:</strong> {{ sub_id }}</p>
+            <p><strong>Patient ID:</strong> {{ submission.patient_id }}</p>
+            <p><strong>Current Status:</strong> {{ submission.review_status }}</p>
+
+            <form method="POST" action="/clinician/review/{{ sub_id }}">
+                <select name="review_status" required>
+                    <option value="Pending" {% if submission.review_status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Reviewed — Normal" {% if submission.review_status == 'Reviewed — Normal' %}selected{% endif %}>Reviewed — Normal</option>
+                    <option value="Needs Follow-up" {% if submission.review_status == 'Needs Follow-up' %}selected{% endif %}>Needs Follow-up</option>
+                    <option value="Escalated" {% if submission.review_status == 'Escalated' %}selected{% endif %}>Escalated</option>
+                </select><br><br>
+                <textarea name="notes" placeholder="Review Notes">{{ submission.notes }}</textarea><br><br>
+                <button type="submit">Save Review</button>
+            </form>
+        </div>
+    {% endfor %}
+</body>
+</html>

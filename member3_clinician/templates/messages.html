@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messages</title>
+</head>
+<body>
+    <a href="/clinician/dashboard">← Back to Dashboard</a>
+    
+    <!-- Required Disclaimer Banner -->
+    <div style="background-color: #ffcccc; padding: 10px; margin: 10px 0;">
+        <strong>Warning:</strong> This messaging channel is not monitored in real time and must not be used for emergencies or urgent medical concerns.
+    </div>
+
+    <h2>Send Message</h2>
+    <form method="POST" action="/clinician/send-message">
+        <label for="recipient_id">Select Patient:</label>
+        <select name="recipient_id" required>
+            {% for patient_id, patient in patients.items() %}
+                <option value="{{ patient_id }}">{{ patient.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <textarea name="body" placeholder="Write your message..." required></textarea><br><br>
+        <button type="submit">Send Message</button>
+    </form>
+
+    <hr>
+    <h2>Message History</h2>
+    {% for msg in messages %}
+        <div style="border: 1px solid #ddd; padding: 8px; margin-bottom: 5px;">
+            <p><strong>From:</strong> {{ msg.sender_id }} | <strong>To:</strong> {{ msg.recipient_id }}</p>
+            <p>{{ msg.body or msg.content }}</p>
+            <small>{{ msg.timestamp }}</small>
+        </div>
+    {% endfor %}
+</body>
+</html>
