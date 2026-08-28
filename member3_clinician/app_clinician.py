@@ -127,3 +127,12 @@ def review_submission(submission_id):
 
     # Redirect back to dashboard
     return redirect(url_for("clinician_dashboard"))
+# Inside app_clinician.py (PYTHON FILE)
+
+@app.route("/clinician/dashboard", methods=["GET"])
+def clinician_dashboard():
+    # Fetch data from JSON files 
+    users_data = load_json("data/users.json")
+    
+    # Render the HTML file and pass Python variables into it
+    return render_template("clinician_dashboard.html", clinician=users_data.get(CURRENT_CLINICIAN_ID))
